@@ -11,6 +11,27 @@
     <p>Crop Risk & Market Intelligence System</p>
 
     <form id="predictionForm">
+        <label>Crop Type</label>
+        <select id="crop_type" required>
+        <option value="Paddy">Paddy</option>
+        <option value="Wheat">Wheat</option>
+        <option value="Maize">Maize</option>
+        <option value="Rice">Rice</option>
+        <option value="Coffee">Coffee</option>
+        </select>
+        <label>Soil Type</label>
+<select id="soil_type">
+    <option value="0">Clay</option>
+    <option value="1">Loamy</option>
+    <option value="2">Sandy</option>
+</select>
+
+<label>Crop Stage</label>
+<select id="crop_stage">
+    <option value="0">Early</option>
+    <option value="1">Late</option>
+    <option value="2">Mid</option>
+</select>
         <label>Soil Moisture (%)</label>
         <input type="number" id="soil_moisture" required>
 

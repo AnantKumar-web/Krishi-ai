@@ -2,7 +2,8 @@ document.getElementById("predictionForm").addEventListener("submit", async funct
     e.preventDefault();
 
     const data = {
-        soil_type: 1,
+        soil_type: document.getElementById("soil_type").value,
+        crop_type: document.getElementById("crop_type").value, 
         soil_moisture: parseFloat(document.getElementById("soil_moisture").value),
         temperature: parseFloat(document.getElementById("temperature").value),
         rainfall: parseFloat(document.getElementById("rainfall").value),
@@ -10,6 +11,7 @@ document.getElementById("predictionForm").addEventListener("submit", async funct
         fertilizer: parseFloat(document.getElementById("fertilizer").value),
         humidity: parseFloat(document.getElementById("humidity").value)
     };
+    console.log(data);
 
     const response = await fetch("https://krishi-ai-backend-hva2.onrender.com/predict", {
         method: "POST",
