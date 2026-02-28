@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 import joblib
@@ -9,6 +10,16 @@ from price_forecast import run_forecast
 # -----------------------------
 app = FastAPI()
 
+# -----------------------------
+# CORS Middleware (ADD THIS HERE)
+# -----------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all origins for now
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # -----------------------------
 # Load Trained Models
 # -----------------------------
