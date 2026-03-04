@@ -6,22 +6,23 @@ import joblib
 from price_forecast import run_forecast
 
 # -----------------------------
-# Initialize App
+# Initialize FastAPI App
 # -----------------------------
 app = FastAPI()
 
 # -----------------------------
-# CORS Middleware (ADD THIS HERE)
+# Enable CORS (Frontend Access)
 # -----------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all origins for now
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 # -----------------------------
-# Load Trained Models
+# Load ML Models (ONLY ONCE)
 # -----------------------------
 disease_model = joblib.load("disease_rf_model.pkl")
 yield_model = joblib.load("yield_rf_model.pkl")
@@ -39,6 +40,7 @@ class FarmInput(BaseModel):
     fertilizer: float
     humidity: float
 
+
 # -----------------------------
 # Root Endpoint
 # -----------------------------
@@ -46,13 +48,14 @@ class FarmInput(BaseModel):
 def home():
     return {"message": "Krishi AI Backend Running"}
 
+
 # -----------------------------
 # Prediction Endpoint
 # -----------------------------
 @app.post("/predict")
 def predict(data: FarmInput):
 
-    # Prepare input dataframe
+    # Create dataframe for ML models
     input_df = pd.DataFrame([{
         "soil_type": data.soil_type,
         "soil_moisture": data.soil_moisture,
@@ -88,10 +91,22 @@ def predict(data: FarmInput):
         risk_level = "High"
 
     # -----------------------------
-    # Market Forecast
+    # Market Forecast (SAFE VERSION)
+    # Only run for supported crops
     # -----------------------------
-    future_price, price_change = run_forecast(data.crop_type)
+    future_price = None
+    price_change = None
 
+    try:
+        if data.crop_type.lower() == "coffee":
+            future_price, price_change = run_forecast(data.crop_type)
+    except:
+        future_price = None
+        price_change = None
+
+    # -----------------------------
+    # Decision Logic
+    # -----------------------------
     if future_price is None:
         decision = "Forecast not available for this crop"
     else:
@@ -115,7 +130,7 @@ def predict(data: FarmInput):
         "predicted_yield_tons_per_acre": round(float(predicted_yield), 2),
         "KRI": round(KRI, 2),
         "risk_level": risk_level,
-        "future_price": round(future_price, 2) if future_price else None,
-        "price_change_percent": round(price_change, 2) if price_change else None,
+        "future_price": round(future_price, 2) if future_price is not None else None,
+        "price_change_percent": round(price_change, 2) if price_change is not None else None,
         "decision": decision
     }
