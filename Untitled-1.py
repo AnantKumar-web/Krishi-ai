@@ -1,4 +1,5 @@
-print("hello world",7)
-print(5)
-print(15*8)
-print("hey i am good boy \nand anant is better than me")
+
+name = "anant kumar"
+age=20
+price=34.55
+print("my name is :",name)
