@@ -34,12 +34,11 @@ const result = await response.json();
 console.log("Backend Response:", result);
 
 resultBox.innerHTML = `
-<h3>Prediction Result</h3>
-<p><b>Disease Probability (%):</b> ${result.disease_probability_percent}</p>
-<p><b>Predicted Yield (tons/acre):</b> ${result.predicted_yield_tons_per_acre}</p>
-<p><b>KRI:</b> ${result.KRI}</p>
-<p><b>Risk Level:</b> ${result.risk_level}</p>
-<p><b>Decision:</b> ${result.decision}</p>
+<div class="result-card"><b>Disease Probability:</b> ${result.disease_probability_percent}%</div>
+<div class="result-card"><b>Predicted Yield:</b> ${result.predicted_yield_tons_per_acre} tons/acre</div>
+<div class="result-card"><b>KRI Score:</b> ${result.KRI}</div>
+<div class="result-card"><b>Risk Level:</b> ${result.risk_level}</div>
+<div class="result-card"><b>Recommendation:</b> ${result.decision}</div>
 `;
 
 }catch(error){
